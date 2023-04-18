@@ -1,0 +1,47 @@
+version: '3.3'
+services:
+    php:
+      tty: true
+      container_name: laravel-terror-webserver
+      build:
+        context: .
+        dockerfile: ./build/webserver/Dockerfile
+      depends_on:
+        - db
+      ports:
+        - 80:80
+        - 443:443
+      working_dir: /var/www/terror
+      volumes:
+        - code:/var/www/terror
+        - ./config/scripts:/opt/scripts
+        - ./config/etc/apache2/sites-enabled:/etc/apache2/sites-enabled
+    db:
+      tty: true
+      container_name: laravel-terror-db
+      build: 
+        context: .
+        dockerfile: ./build/db/Dockerfile
+      volumes:
+        - db_data:/var/lib/mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+        MYSQL_DATABASE: ${DB_DATABASE}
+        MYSQL_USER: ${DB_USER}
+        MYSQL_PASSWORD: ${DB_PASSWORD}
+    vue:
+      tty: true
+      container_name: terror-vue
+      build:
+        context: .
+        dockerfile: ./build/frontend/Dockerfile
+      ports:
+        - 8080:8080
+      working_dir: /app
+      volumes:
+        - code_frontend:/app
+        - ./config/scripts:/opt/scripts
+volumes:
+  db_data:
+  code:
+  code_frontend:
