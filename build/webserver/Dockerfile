@@ -18,3 +18,7 @@ ENV ENV="/root/.bashrc"
 RUN echo "source ~/.git-prompt.sh" >> "$ENV"
 RUN echo "PS1='🐳 \[\033[1;36m\][Webserver]\[\033[1;34m\] [\u] [\w]\$(__git_ps1)\[\e[00m\] '"   >> "$ENV"
 RUN echo "alias ll='ls -lah --color'"  >> "$ENV"
+
+# Add git-prompt.sh
+RUN curl -L https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh > ~/.bash_git
+RUN source ~/.bash_git
